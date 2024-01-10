@@ -19,17 +19,32 @@ def create_table():
             )
         ''')
     
+    cursor.execute('''
+            CREATE TABLE IF NOT EXISTS post(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL
+            )
+        ''')
+    
     cursor.execute('INSERT INTO blogger (username, password) VALUES (?, ?)', ('TaynaraOg', 'Og123'))
     
     conn.commit()
     conn.close()
-    print(" Tabela criada com sucesso")
+    print("Tabelas criadas com sucesso")
 
 create_table()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM post')
+    posts = cursor.fetchall()
+    conn.close()
+    
+    return render_template('index.html', posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -46,12 +61,33 @@ def login():
 
         if user:
             session['user_id'] = user['id']
-            return redirect(url_for('cadastro'))
+            return redirect(url_for('criarPost'))
         else:
-            error = "Dados invalidos"
+            error = "Dados inválidos"
             return render_template('login.html', error=error)
 
     return render_template('login.html')
+
+@app.route('/editPost')
+def editPost():
+    return render_template('editPost.html')
+
+@app.route('/criarPost', methods=['POST', 'GET'])
+def criarPost():
+    if request.method == 'POST':
+        if 'title' in request.form and 'content' in request.form:
+            title = request.form['title']
+            content = request.form['content']
+            
+            conn = sqlite3.connect(DATABASE)
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO post (title, content) VALUES (?, ?)", (title, content))
+            conn.commit()
+            conn.close()
+            
+            return redirect(url_for('index')) 
+
+    return render_template('criarPost.html')  
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Post</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edite.css') }}">
+    <script>
+        function validarFormulario() {
+            var titulo = document.forms["postForm"]["title"].value;
+            var conteudo = document.forms["postForm"]["content"].value;
+
+            if (titulo.trim() === "" || conteudo.trim() === "") {
+                alert("Por favor, preencha todos os campos do formulário.");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Criar Novo Post</h1>
+    <form name="postForm" method="POST" action="{{ url_for('new_post') }}" onsubmit="return validarFormulario()">
+        <label for="title">Título:</label>
+        <input type="text" name="title" required>
+        <br>
+        <label for="content">Conteúdo:</label>
+        <textarea name="content" rows="4" required></textarea>
+        <br>
+        <button type="submit">Publicar</button>
+    </form>
+    <a href="{{ url_for('index') }}">Cancelar</a>
+</body>
+</html>

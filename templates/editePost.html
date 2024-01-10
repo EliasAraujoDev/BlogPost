@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Post</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static/css', filename='edite.css') }}">
+    <script>
+        function validarFormulario() {
+            var titulo = document.forms["postForm"]["title"].value;
+            var conteudo = document.forms["postForm"]["content"].value;
+
+            if (titulo.trim() === "" || conteudo.trim() === "") {
+                alert("Por favor, preencha todos os campos do formulário.");
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    
+    <form name="postForm" method="POST" action="{{ url_for('new_post') }}" onsubmit="return validarFormulario()">
+        <label for="title">Título:</label>
+        <input type="text" name="title" required>
+        <br>
+        <label for="content">Conteúdo:</label>
+        <textarea name="content" rows="4" required></textarea>
+        <br>
+        <button type="submit">Publicar</button>
+        <!-- Adicione o botão de deletar -->
+        <button type="button" onclick="deletarPost()">Deletar</button> 
+        <a href="{{ url_for('criaPost') }}">Editar</a>
+    </form>
+   
+
+    <!-- Adicione um script para manipular a ação de deletar -->
+    <script>
+        function deletarPost() {
+            var confirmacao = confirm("Tem certeza que deseja deletar este post?");
+            if (confirmacao) {
+                // Adicione aqui a lógica para deletar o post, como enviar uma requisição ao servidor
+                // Por exemplo, você pode usar AJAX ou outra técnica para enviar a solicitação de exclusão.
+                // Após a exclusão, redirecione o usuário para a página desejada.
+                // window.location.href = "{{ url_for('pagina_de_redirecionamento') }}";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,16 +1,15 @@
-from flask import Flask, redirect, render_template, request, url_for,session
+from flask import Flask, redirect, render_template, request, url_for, session
 import sqlite3
 import os
+
 app = Flask(__name__)
+app.secret_key = 'some_secret_key'
 
-
-
-DATABASE =os.path.join(os.path.dirname(__file__), 'Blog.db')
+DATABASE = os.path.join(os.path.dirname(__file__), 'Blog.db')
 
 def create_table():
     conn = sqlite3.connect(DATABASE)
-    cursor =  conn.cursor()
-  
+    cursor = conn.cursor()
 
     cursor.execute('''
             CREATE TABLE IF NOT EXISTS blogger(
@@ -28,7 +27,11 @@ def create_table():
 
 create_table()
 
-app.route('/login')
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -37,7 +40,7 @@ def login():
         conn = sqlite3.connect(DATABASE)
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM ADM WHERE username = ? AND password = ?', (username, password))
+        cursor.execute('SELECT * FROM blogger WHERE username = ? AND password = ?', (username, password))
         user = cursor.fetchone()
         conn.close()
 
@@ -46,12 +49,9 @@ def login():
             return redirect(url_for('cadastro'))
         else:
             error = "Dados invalidos"
-        return render_template('login.html', error=error)
+            return render_template('login.html', error=error)
 
-    
-    
     return render_template('login.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

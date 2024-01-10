@@ -5,7 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlogTec</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        main {
+            padding: 20px;
+        }
+        .post {
+            margin-bottom: 20px;
+        }
+        .post h2 {
+            margin-top: 0;
+        }
+
+        main {
+        padding: 20px;
+    }
+
+    .post {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #867878;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+    </style>
 </head>
 
 <body>
